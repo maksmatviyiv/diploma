@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Registration extends StatelessWidget {
+import '../services/firebase_functionality.dart';
+import '../screens/indicators_screen.dart';
 
+class Registration extends StatelessWidget {
+  FirebaseFunctionality firebase = FirebaseFunctionality();
+  String email;
+  String password;
   final String titleRegistration;
 
   Registration({this.titleRegistration});
@@ -25,9 +30,17 @@ class Registration extends StatelessWidget {
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(hintText: 'Email'),
+                onChanged: (val) {
+                  email = val;
+                  print(email);
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(hintText: "Password"),
+                obscureText: true,
+                onChanged: (val) {
+                  password = val;
+                },
               ),
             ],
           ),
@@ -38,7 +51,11 @@ class Registration extends StatelessWidget {
         ButtonTheme(
           minWidth: 250.0,
           child: RaisedButton(
-            onPressed: () {},
+            onPressed: () {
+
+              firebase.registration(email: email, password: password);
+
+            },
             color: Colors.green,
             child: Text(titleRegistration),
           ),
