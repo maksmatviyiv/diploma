@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:smart_socket/components/registration.dart';
+import 'login_screen.dart';
 
 class RegistrationScreen extends StatelessWidget {
   static String id = "registration_screen";
@@ -14,9 +15,10 @@ class RegistrationScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 50.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Text(
                     "Smart Socket",
                     style: TextStyle(
@@ -24,14 +26,10 @@ class RegistrationScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 30.0,
-                ),
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Registration(titleRegistration: "Sign up"),
                 ),
-                SizedBox(height: 60.0),
                 Expanded(
                   flex: 1,
                   child: Column(
@@ -39,11 +37,12 @@ class RegistrationScreen extends StatelessWidget {
                       Text('Already have an account?'),
                       FlatButton(
                         onPressed: () {
-                          print('New screen');
+                          Navigator.pushNamed(context, LoginScreen.id);
                         },
                         child: Text(
                           'Sign in',
-                          style: TextStyle(decoration: TextDecoration.underline),
+                          style:
+                              TextStyle(decoration: TextDecoration.underline),
                         ),
                       )
                     ],

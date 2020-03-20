@@ -6,6 +6,10 @@ class LoginScreen extends StatelessWidget {
   static String id = "login_screen";
   @override
   Widget build(BuildContext context) {
-    return Registration(titleRegistration: "Login");
+    return MaterialApp(
+      home: Scaffold(
+        body: Registration(titleRegistration: "Login"),
+      ),
+    );
   }
 }

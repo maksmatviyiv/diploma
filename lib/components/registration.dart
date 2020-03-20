@@ -52,9 +52,7 @@ class Registration extends StatelessWidget {
           minWidth: 250.0,
           child: RaisedButton(
             onPressed: () {
-
               firebase.registration(email: email, password: password);
-
             },
             color: Colors.green,
             child: Text(titleRegistration),
