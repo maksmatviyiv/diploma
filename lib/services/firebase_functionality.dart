@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class FirebaseFunctionality {
   final _auth = FirebaseAuth.instance;
+  final _firestore = Firestore.instance;
   String errorMessage, errorLoginMessage;
   var user, existingUser;
+  FirebaseUser currentUser;
 
   Future registration({String email, String password}) async {
     try {
@@ -47,4 +50,10 @@ class FirebaseFunctionality {
   String loginUnSuccess() {
     return errorLoginMessage;
   }
+  Future addDevice(String idDevice) async {
+    currentUser = await _auth.currentUser();
+    _firestore.collection('devices').document(idDevice).updateData({"owner": "${currentUser.email}"});
+  }
 }
+
+
