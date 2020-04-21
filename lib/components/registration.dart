@@ -3,18 +3,18 @@ import 'package:flutter/services.dart';
 
 import '../services/firebase_functionality.dart';
 import '../screens/indicators_screen.dart';
+import '..//../constants.dart';
 
 class Registration extends StatefulWidget {
   final String titleRegistration;
-
-  Registration({this.titleRegistration});
+  final String action;
+  Registration({this.titleRegistration, this.action});
 
   @override
   _RegistrationState createState() => _RegistrationState();
 }
 
 class _RegistrationState extends State<Registration> {
-
   FirebaseFunctionality _firebase = FirebaseFunctionality();
   String _email;
   String _password;
@@ -79,16 +79,35 @@ class _RegistrationState extends State<Registration> {
           child: RaisedButton(
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                _firebase.registration(email: _email, password: _password);
-                if (_firebase.existAcount() != null) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                    _firebase.existAcount(),
-                    textAlign: TextAlign.center,
-                  )));
+                if (widget.action == registration) {
+                  _firebase.registration(email: _email, password: _password);
+                  if (_firebase.existAccount() != null) {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          _firebase.existAccount(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else {
+                    print(_firebase.existAccount());
+                    Navigator.pushNamed(context, IndicatorsScreen.id);
+                  }
                 } else {
-                  print(_firebase.existAcount());
-                  Navigator.pushNamed(context, IndicatorsScreen.id);
+                  _firebase.login(email: _email, password: _password);
+                  if (_firebase.loginUnSuccess() != null) {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          _firebase.loginUnSuccess(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.pushNamed(context, IndicatorsScreen.id);
+                  }
                 }
               }
             },

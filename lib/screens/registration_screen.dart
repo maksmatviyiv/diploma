@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:smart_socket/components/registration.dart';
+import 'package:smart_socket/constants.dart';
 import 'login_screen.dart';
 
 class RegistrationScreen extends StatelessWidget {
@@ -28,7 +29,7 @@ class RegistrationScreen extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 4,
-                  child: Registration(titleRegistration: "Sign up"),
+                  child: Registration(titleRegistration: "Sign up", action: registration,),
                 ),
                 Expanded(
                   flex: 1,
