@@ -54,6 +54,10 @@ class FirebaseFunctionality {
     currentUser = await _auth.currentUser();
     _firestore.collection('devices').document(idDevice).updateData({"owner": "${currentUser.email}"});
   }
+
+  void turnOnOffDevice(String idDevice, bool status)  {
+    _firestore.collection('devices').document(idDevice).updateData({"status": status});
+  }
 }
 
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../components/device_display.dart';
 
 class DeviceScreen extends StatelessWidget {
 
@@ -15,15 +17,16 @@ class DeviceScreen extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final devices = snapshot.data.documents;
-                List<Text> deviceWidgets = [];
+                List<DeviceDisplay> deviceWidgets = [];
                 for (var device in devices) {
                   final deviceName = device.data['customName'];
-                  final deviceTemperature = device.data['temperature'].toString();
-
-                  final deviceWidget = Text('$deviceName, $deviceTemperature');
+                  final deviceTemperature = device.data['temperature'];
+                  final status = device.data['status'];
+                  final idDocument = device.documentID;
+                  final deviceWidget = DeviceDisplay(documentId: idDocument, deviceName: deviceName, temperature: deviceTemperature, status: status,);
                   deviceWidgets.add(deviceWidget);
                 }
-                return Column(
+                return ListView(
                   children: deviceWidgets,
                 );
               }
