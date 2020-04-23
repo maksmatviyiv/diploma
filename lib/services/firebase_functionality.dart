@@ -58,6 +58,14 @@ class FirebaseFunctionality {
   void turnOnOffDevice(String idDevice, bool status)  {
     _firestore.collection('devices').document(idDevice).updateData({"status": status});
   }
+  void changeName(String idDevice, String newName)  {
+    _firestore.collection('devices').document(idDevice).updateData({"customName": newName});
+  }
+
+  Future<void> deleteDevice(String idDevice) async {
+    _firestore.collection('devices').document(idDevice).delete();
+  }
+
 }
 
 
