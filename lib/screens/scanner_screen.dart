@@ -3,6 +3,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 
 import '../services/firebase_functionality.dart';
+import '../components/scan_error.dart';
 
 class ScannerScreen extends StatefulWidget {
   @override
@@ -12,28 +13,7 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
   FirebaseFunctionality _firebaseFunctionality = FirebaseFunctionality();
   String _idDevice;
-  String errorMessage;
-  Widget startWidget() {
-    if (errorMessage != null) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text(errorMessage),
-              RaisedButton(
-                child: Text("Try again"),
-                onPressed: () {
-                  scan();
-                },
-              )
-            ],
-          ),
-        ),
-      );
-    } else {
-      return Scaffold();
-    }
-  }
+  String _errorMessage;
 
   @override
   void initState() {
@@ -43,7 +23,14 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: startWidget());
+    return MaterialApp(
+      home: _errorMessage != null
+          ? ScanError(
+              scanFunction: scan,
+              errorMessage: _errorMessage,
+            )
+          : Scaffold(),
+    );
   }
 
   Future scan() async {
@@ -54,16 +41,16 @@ class _ScannerScreenState extends State<ScannerScreen> {
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          this.errorMessage = 'The user did not grant the camera permission!';
+          this._errorMessage = 'The user did not grant the camera permission!';
         });
       } else {
-        setState(() => this.errorMessage = 'Unknown error: $e');
+        setState(() => this._errorMessage = 'Unknown error: $e');
       }
     } on FormatException {
-      setState(() => this.errorMessage =
-          'null (User returned using the "back"-button before scanning anything. Result)');
+      setState(() => this._errorMessage =
+          'User returned using the "back"-button before scanning anything');
     } catch (e) {
-      setState(() => this.errorMessage = 'Unknown error: $e');
+      setState(() => this._errorMessage = 'Unknown error: $e');
     }
   }
 }
