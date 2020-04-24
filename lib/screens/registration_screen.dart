@@ -20,30 +20,30 @@ class RegistrationScreen extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   flex: 1,
-                  child: Text(
-                    "Smart Socket",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
-                  ),
+                  child: Text(Strings.applicationName,
+                      style: Style.applicationName),
                 ),
                 Expanded(
-                  flex: 4,
-                  child: Registration(titleRegistration: "Sign up", action: registration,),
+                  flex: 6,
+                  child: Registration(
+                      titleRegistration: Strings.signUp,
+                      action: Strings.registration),
                 ),
                 Expanded(
                   flex: 1,
                   child: Column(
                     children: <Widget>[
-                      Text('Already have an account?'),
+                      Text(
+                        Strings.questionAboutAccount,
+                        style: Style.questionAboutAccountStyle,
+                      ),
                       FlatButton(
                         onPressed: () {
                           Navigator.pushNamed(context, LoginScreen.id);
                         },
                         child: Text(
                           'Sign in',
-                          style:
-                              TextStyle(decoration: TextDecoration.underline),
+                          style: Style.signInStyle,
                         ),
                       )
                     ],

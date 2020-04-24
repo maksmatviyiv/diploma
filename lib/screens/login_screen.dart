@@ -8,7 +8,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Registration(titleRegistration: "Login", action: login),
+        body: Registration(titleRegistration: Strings.log, action: Strings.login),
       );
 
   }
