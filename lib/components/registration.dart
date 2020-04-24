@@ -56,7 +56,7 @@ class _RegistrationState extends State<Registration> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(hintText: Strings.manageDevice),
+                  decoration: InputDecoration(hintText: Strings.hintPassword),
                   obscureText: true,
                   onChanged: (value) {
                     _password = value;
