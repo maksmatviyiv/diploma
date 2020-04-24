@@ -52,7 +52,7 @@ class FirebaseFunctionality {
   }
   Future addDevice(String idDevice) async {
     currentUser = await _auth.currentUser();
-    _firestore.collection('devices').document(idDevice).updateData({"owner": "${currentUser.email}"});
+    _firestore.collection('devices').document(idDevice).updateData({"owner": "${currentUser.uid}"});
   }
 
   void turnOnOffDevice(String idDevice, bool status)  {
@@ -66,6 +66,10 @@ class FirebaseFunctionality {
     _firestore.collection('devices').document(idDevice).delete();
   }
 
+  Future getUid() async {
+    currentUser = await _auth.currentUser();
+    return currentUser.uid;
+  }
 }
 
 
