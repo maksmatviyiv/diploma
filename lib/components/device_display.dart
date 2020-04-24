@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../services/firebase_functionality.dart';
+import '../constants.dart';
 
 class DeviceDisplay extends StatelessWidget {
   final String deviceName;
@@ -20,26 +22,46 @@ class DeviceDisplay extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text("Input new name for device"),
-                    content: TextField(
-                      onChanged: (newName) {
-                        newDeviceName = newName;
-                      },
+                    title: Text(Strings.manageDevice),
+                    content: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 3,
+                          child: TextField(
+                            decoration: InputDecoration(hintText: Strings.hintChangeName),
+                            onChanged: (newName) {
+                              newDeviceName = newName;
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: GestureDetector(
+                            onTap: () {
+                              firebaseFunctionality.changeName(
+                                  documentId, newDeviceName);
+                              Navigator.of(context).pop();
+                            },
+                            child: Icon(
+                              Icons.edit_attributes,
+                              size: 35.0,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     actions: [
-                      RaisedButton(
-                          child: Text("Change name"),
-                          onPressed: () {
-                            firebaseFunctionality.changeName(
-                                documentId, newDeviceName);
-                            Navigator.of(context).pop();
-                          }),
-                      RaisedButton(
-                          child: Text("Delete device"),
-                          onPressed: () {
-                            firebaseFunctionality.deleteDevice(documentId);
-                            Navigator.of(context).pop();
-                          })
+                      GestureDetector(
+                        child: Container(
+                          color: Colors.red,
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 35.0,
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 });
@@ -51,6 +73,9 @@ class DeviceDisplay extends StatelessWidget {
         children: <Widget>[
           Text(temperature.toString()),
           Switch(
+            activeColor: Colors.green,
+            inactiveThumbColor: Colors.red,
+            inactiveTrackColor: Colors.red,
             value: status,
             onChanged: (bool newValue) {
               firebaseFunctionality.turnOnOffDevice(documentId, newValue);
