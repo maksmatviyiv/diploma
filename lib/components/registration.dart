@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,20 +28,20 @@ class _RegistrationState extends State<Registration> {
       children: <Widget>[
         Text(
           widget.titleRegistration,
-          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          style: Style.signUpStyle,
         ),
         SizedBox(
           height: 10.0,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.0),
+          padding: EdgeInsets.symmetric(horizontal: 30.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(hintText: 'Email'),
+                  decoration: InputDecoration(hintText: Strings.hintEmail),
                   onChanged: (value) {
                     _email = value;
                   },
@@ -49,20 +50,20 @@ class _RegistrationState extends State<Registration> {
                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                         .hasMatch(value);
                     if (emailValid == false) {
-                      return "Please input correct email";
+                      return Strings.emailValidation;
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(hintText: "Password"),
+                  decoration: InputDecoration(hintText: Strings.manageDevice),
                   obscureText: true,
                   onChanged: (value) {
                     _password = value;
                   },
                   validator: (value) {
                     if (value.length < 8) {
-                      return "Password must contains more than 8 char";
+                      return Strings.passwordValidation;
                     }
                     return null;
                   },
@@ -75,15 +76,18 @@ class _RegistrationState extends State<Registration> {
           height: 10.0,
         ),
         ButtonTheme(
-          minWidth: 250.0,
+          minWidth: 200.0,
           child: RaisedButton(
+            color: Color.fromRGBO(141, 157, 127, 1),
+            child: Text(widget.titleRegistration, style: Style.buttonTextStyle),
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                if (widget.action == registration) {
+                if (widget.action == Strings.registration) {
                   _firebase.registration(email: _email, password: _password);
                   if (_firebase.existAccount() != null) {
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
+                        backgroundColor: Color.fromRGBO(134, 162, 114, 1),
                         content: Text(
                           _firebase.existAccount(),
                           textAlign: TextAlign.center,
@@ -91,7 +95,6 @@ class _RegistrationState extends State<Registration> {
                       ),
                     );
                   } else {
-                    print(_firebase.existAccount());
                     Navigator.pushNamed(context, IndicatorsScreen.id);
                   }
                 } else {
@@ -99,6 +102,7 @@ class _RegistrationState extends State<Registration> {
                   if (_firebase.loginUnSuccess() != null) {
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
+                        backgroundColor: Color.fromRGBO(134, 162, 114, 1),
                         content: Text(
                           _firebase.loginUnSuccess(),
                           textAlign: TextAlign.center,
@@ -111,8 +115,6 @@ class _RegistrationState extends State<Registration> {
                 }
               }
             },
-            color: Colors.green,
-            child: Text(widget.titleRegistration),
           ),
         )
       ],
