@@ -8,7 +8,7 @@ class DeviceDisplay extends StatelessWidget {
   final String documentId;
   final int temperature;
   final bool status;
-  String newDeviceName;
+  final newDeviceNameController = TextEditingController();
   final FirebaseFunctionality firebaseFunctionality = FirebaseFunctionality();
   DeviceDisplay(
       {this.documentId, this.deviceName, this.temperature, this.status});
@@ -19,6 +19,7 @@ class DeviceDisplay extends StatelessWidget {
       children: <Widget>[
         ListTile(
           leading: GestureDetector(
+              child: Icon(Icons.edit)),
               onTap: () {
                 showDialog(
                     context: context,
@@ -30,49 +31,43 @@ class DeviceDisplay extends StatelessWidget {
                             Expanded(
                               flex: 3,
                               child: TextField(
-                                decoration: InputDecoration(hintText: Strings.hintChangeName),
-                                onChanged: (newName) {
-                                  newDeviceName = newName;
-                                },
+                                decoration: InputDecoration(
+                                    hintText: Strings.hintChangeName),
+                                controller: newDeviceNameController,
                               ),
                             ),
                             Expanded(
                               flex: 1,
-                              child: GestureDetector(
-                                onTap: () {
+                              child: IconButton(
+                                icon: Icon(Icons.edit_attributes,
+                                    size: 35.0, color: Colors.green),
+                                onPressed: () {
                                   firebaseFunctionality.changeName(
-                                      documentId, newDeviceName);
+                                      documentId, newDeviceNameController.text);
                                   Navigator.of(context).pop();
                                 },
-                                child: Icon(
-                                  Icons.edit_attributes,
-                                  size: 35.0,
-                                  color: Colors.green,
-                                ),
                               ),
                             ),
                           ],
                         ),
                         actions: [
-                          GestureDetector(
-                            onTap: () {
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 35.0,
+                            ),
+                            color: Colors.red,
+                            onPressed: () {
                               firebaseFunctionality.deleteDevice(documentId);
                               Navigator.of(context).pop();
                             },
-                            child: Container(
-                              color: Colors.red,
-                              child: Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                                size: 35.0,
-                              ),
-                            ),
                           ),
                         ],
                       );
                     });
               },
-              child: Icon(Icons.edit)),
+
           title: Text(deviceName),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -89,11 +84,10 @@ class DeviceDisplay extends StatelessWidget {
               )
             ],
           ),
-          onTap: () {
-            print(deviceName);
-          },
         ),
-        Divider(color: Colors.black,),
+        Divider(
+          color: Colors.black,
+        ),
       ],
     );
   }
