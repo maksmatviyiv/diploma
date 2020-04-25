@@ -13,7 +13,7 @@ class SmartSocket extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: RegistrationScreen.id,
+      initialRoute: DeviceScreen.id,
       routes: {
         RegistrationScreen.id : (context) => RegistrationScreen(),
         LoginScreen.id : (context) => LoginScreen(),
