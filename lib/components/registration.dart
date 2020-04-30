@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../services/firebase_functionality.dart';
 import '../screens/indicators_screen.dart';
 import '..//../constants.dart';
+import 'adaptive_button.dart';
 
 class Registration extends StatefulWidget {
   final String titleRegistration;
@@ -77,10 +78,9 @@ class _RegistrationState extends State<Registration> {
         ),
         ButtonTheme(
           minWidth: 200.0,
-          child: RaisedButton(
-            color: Color.fromRGBO(141, 157, 127, 1),
+          child: AdaptiveButton(
             child: Text(widget.titleRegistration, style: Style.buttonTextStyle),
-            onPressed: () async {
+            onPress: () async {
               if (_formKey.currentState.validate()) {
                 if (widget.action == Strings.registration) {
                   _firebase.registration(email: _email, password: _password);
