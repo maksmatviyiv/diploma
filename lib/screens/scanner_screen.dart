@@ -24,6 +24,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: _errorMessage != null
           ? ScanError(
               scanFunction: scan,

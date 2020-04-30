@@ -16,40 +16,42 @@ class DeviceManage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150.0,
+      height: MediaQuery.of(context).size.height * 0.15,
       margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Center(child: Text("Device Manage")),
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: TextField(
-                  decoration: InputDecoration(hintText: Strings.hintChangeName),
-                  controller: nameDeviceController,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Center(child: Text("Device Manage")),
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: TextField(
+                    decoration: InputDecoration(hintText: Strings.hintChangeName),
+                    controller: nameDeviceController,
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: IconButton(
-                    icon: Center(
-                      child: Icon(Icons.edit_attributes,
-                          size: 45.0, color: Colors.green),
-                    ),
-                    onPressed: changeName),
-              ),
-            ],
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: Colors.red,
-                size: 35.0,
-              ),
-              onPressed: removeDevice),
-        ],
+                Expanded(
+                  flex: 1,
+                  child: IconButton(
+                      icon: Center(
+                        child: Icon(Icons.edit_attributes,
+                            size: 45.0, color: Colors.green),
+                      ),
+                      onPressed: changeName),
+                ),
+              ],
+            ),
+            IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 35.0,
+                ),
+                onPressed: removeDevice),
+          ],
+        ),
       ),
     );
   }
