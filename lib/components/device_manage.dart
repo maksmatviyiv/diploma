@@ -5,12 +5,10 @@ import '../constants.dart';
 
 class DeviceManage extends StatelessWidget {
   final Function changeName;
-  final Function removeDevice;
   final nameDeviceController;
 
   DeviceManage(
       {@required this.changeName,
-      @required this.removeDevice,
       @required this.nameDeviceController});
 
   @override
@@ -27,7 +25,7 @@ class DeviceManage extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 3,
-                  child: TextField(
+                  child: TextFormField(
                     decoration: InputDecoration(hintText: Strings.hintChangeName),
                     controller: nameDeviceController,
                   ),
@@ -43,13 +41,6 @@ class DeviceManage extends StatelessWidget {
                 ),
               ],
             ),
-            IconButton(
-                icon: Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                  size: 35.0,
-                ),
-                onPressed: removeDevice),
           ],
         ),
       ),
