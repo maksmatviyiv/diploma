@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../services/firebase_functionality.dart';
 import '../components/scan_error.dart';
+import '../screens/device_screen.dart';
 
 class ScannerScreen extends StatefulWidget {
   @override
@@ -39,6 +40,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       String barcode = await BarcodeScanner.scan();
       this._idDevice = barcode;
       _firebaseFunctionality.addDevice(this._idDevice);
+      Navigator.of(context).pushNamed(DeviceScreen.id);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
