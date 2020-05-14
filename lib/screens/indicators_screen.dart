@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/adaptive_bottom_navigation_bar.dart';
@@ -24,6 +25,17 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Smart Socket"),
+        actions: <Widget>[
+          FlatButton.icon(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              icon: Icon(Icons.exit_to_app),
+              label: Text("Logout"))
+        ],
+      ),
       body: _screens[_currentIndex],
       bottomNavigationBar: AdaptiveBottomNavigationBar(
         index: _currentIndex,
