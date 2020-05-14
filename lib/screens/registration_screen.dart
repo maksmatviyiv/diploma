@@ -1,12 +1,44 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:smart_socket/components/registration.dart';
 import 'package:smart_socket/constants.dart';
-import 'login_screen.dart';
 
-class RegistrationScreen extends StatelessWidget {
+class RegistrationScreen extends StatefulWidget {
   static String id = "registration_screen";
+
+  @override
+  _RegistrationScreenState createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+  void _submitAuthForm(
+      String email, String password, bool isLogin, BuildContext ctx) async {
+    AuthResult authResult;
+    try {
+      if (isLogin) {
+        authResult = await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+      } else {
+        authResult = await _auth.createUserWithEmailAndPassword(
+            email: email, password: password);
+      }
+    } on PlatformException catch (error) {
+      var message = 'An error occurred. please check yout credentials';
+      if (error.message != null) {
+        message = error.message;
+        Scaffold.of(ctx).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,34 +51,14 @@ class RegistrationScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  flex: 1,
+                  flex: 3,
                   child: Text(Strings.applicationName,
                       style: Style.applicationName),
                 ),
                 Expanded(
                   flex: 6,
                   child: Registration(
-                      titleRegistration: Strings.signUp,
-                      action: Strings.registration),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        Strings.questionAboutAccount,
-                        style: Style.questionAboutAccountStyle,
-                      ),
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, LoginScreen.id);
-                        },
-                        child: Text(
-                          'Sign in',
-                          style: Style.signInStyle,
-                        ),
-                      )
-                    ],
+                    submitForm: _submitAuthForm,
                   ),
                 ),
               ],
