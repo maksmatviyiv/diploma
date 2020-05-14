@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smart_socket/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../components/device_display.dart';
 import '../services/firebase_functionality.dart';
@@ -18,9 +18,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
   String _ownerId;
   @override
   void initState() {
-    _firebaseFunctionality.getUid().then((value) => setState(() {
-          _ownerId = value;
-        }));
+//    _firebaseFunctionality.getUid().then((value) => setState(() {
+//          _ownerId = value;
+//        }));
     super.initState();
   }
 
@@ -30,37 +30,37 @@ class _DeviceScreenState extends State<DeviceScreen> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
-          child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore
-                  .collection('devices')
-                  .where('owner', isEqualTo: _ownerId)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final devices = snapshot.data.documents;
-                  List<DeviceDisplay> deviceWidgets = [];
-                  for (var device in devices) {
-                    final deviceName = device.data['customName'];
-                    final deviceTemperature = device.data['temperature'];
-                    final status = device.data['status'];
-                    final idDocument = device.documentID;
-                    final deviceWidget = DeviceDisplay(
-                      documentId: idDocument,
-                      deviceName: deviceName,
-                      temperature: deviceTemperature,
-                      status: status,
-                    );
-                    deviceWidgets.add(deviceWidget);
-                  }
-                  return ListView(
-                    children: deviceWidgets,
+          child: FutureBuilder(
+            future: FirebaseAuth.instance.currentUser(),
+            builder: (context, futureShapshot) {
+              if (futureShapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return StreamBuilder(
+                stream: _firestore
+                    .collection('devices')
+                    .where('owner',
+                        isEqualTo: futureShapshot.data.uid.toString())
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  final devicesDocuments =
+                      snapshot.data == null ? null : snapshot.data.documents;
+                  return ListView.builder(
+                    itemCount:
+                        devicesDocuments == null ? 0 : devicesDocuments.length,
+                    itemBuilder: (ctx, index) => DeviceDisplay(
+                      documentId: devicesDocuments[index].documentID,
+                      deviceName: devicesDocuments[index]['customName'],
+                      temperature: devicesDocuments[index]['temperature'],
+                      status: devicesDocuments[index]['status'],
+                    ),
                   );
-                } else {
-                  return Center(
-                    child: Text(Strings.deviceNotFound),
-                  );
-                }
-              }),
+                },
+              );
+            },
+          ),
         ),
       ),
     );
